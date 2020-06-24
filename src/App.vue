@@ -35,4 +35,17 @@ body {
   width: 30%;
   margin: auto;
 }
+@media screen and (max-width: 1020px) {
+  .container-small {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 720px) {
+  .container-small {
+    width: 80%;
+  }
+  .container-small {
+    width: 80%;
+  }
+}
 </style>
