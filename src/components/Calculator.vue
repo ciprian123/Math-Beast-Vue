@@ -118,7 +118,12 @@ export default {
         this.result = eval(this.result + '*' + this.result)
       } else {
         let lastTokenIndex = this.result.lastIndexOf(lastToken)
-        this.result = this.result.substring(0, lastTokenIndex) + eval(lastToken + '*' + lastToken)
+        console.log(lastTokenIndex + '#' + this.result.substring(0, lastTokenIndex))
+        if (lastTokenIndex == 1 && this.result[0] == '-') {
+          this.result = eval(this.result + '*' + this.result)
+        } else {
+          this.result = this.result.substring(0, lastTokenIndex) + eval(lastToken + '*' + lastToken)
+        }
       }
     },
     inverseResult: function() {
