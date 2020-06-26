@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     appendToResult: function(chr) {
-      console.log(this.getLastToken())
       if (this.result == '') {
         if (chr == '.') {
           this.result += '0.'
@@ -114,10 +113,22 @@ export default {
       }
     },
     squareResult: function() {
-
+      let lastToken = this.getLastToken()
+      if (lastToken.length == this.result.length) {
+        this.result = eval(this.result + '*' + this.result)
+      } else {
+        let lastTokenIndex = this.result.lastIndexOf(lastToken)
+        this.result = this.result.substring(0, lastTokenIndex) + eval(lastToken + '*' + lastToken)
+      }
     },
     inverseResult: function() {
-
+      let lastToken = this.getLastToken()
+      if (lastToken.length == this.result.length) {
+        this.result = eval('1/' + this.result)
+      } else {
+        let lastTokenIndex = this.result.lastIndexOf(lastToken)
+        this.result = this.result.substring(0, lastTokenIndex) + eval('1/' + lastToken)
+      }
     },
     clearResult: function() {
       this.result = ''
