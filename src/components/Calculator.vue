@@ -2,8 +2,7 @@
   <div id='calculator'>
     <div class='container-small'>
       <div id='result'>
-        <p v-if='result == ""'>0</p>
-        <p v-else>{{ result }}</p>
+        <p id='resultString' >{{ result }}</p>
       </div>
       <div id='calc-buttons'>
         <button class='btn' v-on:click='toogleSign'>+/-</button>
@@ -39,12 +38,17 @@
 export default {
   data () {
     return {
-      result: '',
+      result: '0',
       operators: '+-/x'
     }
   },
   methods: {
+    adaptResultArea() {
+      const resultString = document.querySelector('#resultString')
+      console.log(resultString.offsetWidth)
+    },
     appendToResult: function(chr) {
+      this.adaptResultArea()
       if (this.result == '') {
         if (chr == '.') {
           this.result += '0.'
@@ -115,12 +119,12 @@ export default {
     squareResult: function() {
       let lastToken = this.getLastToken()
       if (lastToken.length == this.result.length) {
-        this.result = eval(this.result + '*' + this.result)
+        this.result = String(eval(this.result + '*' + this.result))
       } else {
         let lastTokenIndex = this.result.lastIndexOf(lastToken)
         console.log(lastTokenIndex + '#' + this.result.substring(0, lastTokenIndex))
         if (lastTokenIndex == 1 && this.result[0] == '-') {
-          this.result = eval(this.result + '*' + this.result)
+          this.result = String(eval(this.result + '*' + this.result))
         } else {
           this.result = this.result.substring(0, lastTokenIndex) + eval(lastToken + '*' + lastToken)
         }
@@ -129,14 +133,14 @@ export default {
     inverseResult: function() {
       let lastToken = this.getLastToken()
       if (lastToken.length == this.result.length) {
-        this.result = eval('1/' + this.result)
+        this.result = String(eval('1/' + this.result))
       } else {
         let lastTokenIndex = this.result.lastIndexOf(lastToken)
         this.result = this.result.substring(0, lastTokenIndex) + eval('1/' + lastToken)
       }
     },
     clearResult: function() {
-      this.result = ''
+      this.result = '0'
     },
     computeResult: function() {
       let solution = eval(this.result)
@@ -168,6 +172,7 @@ export default {
 }
 
 #result p {
+  max-width: 95%;
   text-align: right;
   margin-right: 12px;
   font-size: 32px;
