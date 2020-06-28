@@ -1,8 +1,8 @@
 <template>
   <div id='calculator'>
     <div class='container-small'>
-      <div id='result'>
-        <p id='resultString' >{{ result }}</p>
+      <div ref='result' id='result'>
+        <span ref='resultString' id='resultString'>{{ result }}</span>
       </div>
       <div id='calc-buttons'>
         <button class='btn' v-on:click='toogleSign'>+/-</button>
@@ -28,7 +28,7 @@
         <button class='btn' v-on:click='appendToResult("1")'>1</button>
         <button class='btn' v-on:click='appendToResult("2")'>2</button>
         <button class='btn' v-on:click='appendToResult("3")'>3</button>
-        <button class='btn' v-on:click='computeResult'>=</button>
+        <button class='btn' id='equal-btn' v-on:click='computeResult'>=</button>
       </div>
     </div>
   </div>
@@ -43,12 +43,11 @@ export default {
     }
   },
   methods: {
-    adaptResultArea() {
-      const resultString = document.querySelector('#resultString')
-      console.log(resultString.offsetWidth)
-    },
     appendToResult: function(chr) {
-      this.adaptResultArea()
+      this.adaptExpressionToScreen(15, 2)
+      if (this.result === this.alertWarningSize()) {
+        return
+      }
       if (this.result == '') {
         if (chr == '.') {
           this.result += '0.'
@@ -155,6 +154,25 @@ export default {
       let lastIndexOfDiv = this.result.lastIndexOf('/');
       let index = Math.max(Math.max(lastIndexOfAdd, lastIndexOfSub), Math.max(lastIndexOfMul, lastIndexOfDiv))
       return index >= 0 ? this.result.substring(index + 1) : this.result
+    },
+    adaptExpressionToScreen: function(minFontSize, step) {
+      const expression = this.$refs.resultString
+      let expressionWidth = this.$refs.resultString.getBoundingClientRect().width
+      const resultAreaWidth = this.$refs.result.clientWidth
+      console.log(expressionWidth + ' ' + resultAreaWidth)
+      if (expressionWidth + 50 >= resultAreaWidth) {
+        const expressionFontSize = getComputedStyle(expression).fontSize
+        const extractedSize = parseInt(expressionFontSize.substring(0, expressionFontSize.length - 2))
+        expression.style.fontSize =  (extractedSize - step) + 'px'
+        expressionWidth = this.$refs.resultString.getBoundingClientRect().width
+        if (extractedSize <= minFontSize) {
+          this.result = this.alertWarningSize()
+          expression.style.fontSize =  '32px'
+        }
+      }
+    },
+    alertWarningSize: function() {
+      return 'Expression too long!'
     }
   }
 }
@@ -171,12 +189,13 @@ export default {
   border-radius: 5px 5px 0 0;
 }
 
-#result p {
+#result span {
   max-width: 95%;
   text-align: right;
   margin-right: 12px;
   font-size: 32px;
   color: white;
+  float: right;
 }
 
 #calc-buttons {
@@ -203,5 +222,9 @@ export default {
 
 .btn:hover {
   background: #607D8B;
+}
+
+#equal-btn {
+  background: #E65100;
 }
 </style>
