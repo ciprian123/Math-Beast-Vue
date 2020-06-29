@@ -4,10 +4,6 @@
       <span>Currency converter</span>
     </div>
     <div class='input-area'>
-      <div class='container-medium'>
-        <label for='amount-to-convert'>Enter the amount:</label>
-        <input id='amount-input' type='number' required>
-      </div> 
     </div>
     <div class='conversion-area'>
       <div class='container-medium'>
@@ -69,32 +65,18 @@ export default {
     color: white;
     font-size: 22px;
   }
-  .input-area {
-    height: 150px;
-    padding-top: 32px;
-    background: white;
-  }
-  #amount-input {
-    display: block;
-    margin-top: 12px;
-    width: 100%;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 2px solid #E65100;
-    outline: none;
-    text-align: right;
-    font-size: 22px;
-  }
   .conversion-area {
     background: white;
     height: 200px;
+    padding-top: 64px;
   }
   .convert-from-area select, .convert-to-area select {
     display: block;
     width: 100%;
     font-size: 16px;
     margin-top: 12px;
+    text-align: center;
+    padding: 5px 0;
   }
   .convert-from-area select option, .convert-from-area select option {
     text-align: center;
@@ -132,6 +114,6 @@ export default {
     padding: 25px 0;
     font-size: 22px;
     border-radius: 0 0 3px 3px;
-    margin-top: -50px;
+    margin-top: -60px;
   }
 </style>
