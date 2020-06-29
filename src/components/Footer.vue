@@ -21,7 +21,7 @@ footer {
   width: 100%;
   height: 60px;
   background: white;
-  margin-top: 100px;
+  margin-top: 200px;
 }
 #copyright-title {
   padding: 0;

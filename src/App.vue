@@ -26,9 +26,12 @@ body {
   font-family: 'Roboto', sans-serif;
   background: #263238;
 }
-
 .container-large {
   width: 95%;
+  margin: auto;
+}
+.container-medium {
+  width: 55%;
   margin: auto;
 }
 .container-small {
