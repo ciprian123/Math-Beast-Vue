@@ -9,28 +9,22 @@
       <div class='container-medium'>
         <div class='convert-from-area'>
           <label for='convert-from'>Choose currency to convert from:</label>
-          <select name='convert-from' id='convert-from'>
-            <option value='volvo'>Volvo</option>
-            <option value='saab'>Saab</option>
-            <option value='mercedes'>Mercedes</option>
-            <option value='audi'>Audi</option>
+          <select ref='convertFromSelect' name='convert-from' id='convert-from'>
+            <option v-for='unit in conversionUnits' v-bind:key='unit' v-bind:value='unit'>{{ unit }}</option>
           </select>
         </div>
       </div>
       <div class='container-medium'>
         <div class='convert-to-area'>
           <label for='convert-to'>Choose currency to convert to:</label>
-          <select name='convert-to' id='convert-to'>
-            <option value='volvo'>Volvo</option>
-            <option value='saab'>Saab</option>
-            <option value='mercedes'>Mercedes</option>
-            <option value='audi'>Audi</option>
+          <select ref='convertToSelect' name='convert-to' id='convert-to'>
+            <option v-for='unit in conversionUnits' v-bind:key='unit' v-bind:value='unit'>{{ unit }}</option>
           </select>
         </div>
       </div>
       <div class='result-area'>
         <div class='container-medium'>
-        <button id='compute-conversion-btn'>Convert</button>
+        <button v-on:click='computeConversion' id='compute-conversion-btn'>Convert</button>
         </div>
       </div>
       <div id='result-label'>The result is: {{ result }}</div>
@@ -39,11 +33,35 @@
 </template>
 
 <script>
+import config, { apiURL } from '../config'
+
 export default {
   data() {
     return {
-      result: '0'
+      result: '0',
+      conversionUnits: []
     }
+  },
+  methods: {
+    computeConversion: function() {
+      const convertFromSelect = this.$refs.convertFromSelect
+      const convertToSelect = this.$refs.convertToSelect
+
+      const unitFrom = convertFromSelect.options[convertFromSelect.selectedIndex].value
+      const unitTo = convertToSelect.options[convertToSelect.selectedIndex].value
+
+      this.$http.get(`${apiURL}` + '?base=' + `${unitFrom}`)
+                .then(response => {
+                  this.result = response.body.rates[unitTo]
+                })
+    }
+  },
+  created: function() {
+    this.$http.get(apiURL)
+              .then(response => {
+                this.conversionUnits = Object.keys(response.body.rates)
+                this.conversionUnits.push('EUR')
+              })
   }
 }
 </script>
